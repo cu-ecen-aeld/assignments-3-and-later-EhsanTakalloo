@@ -2,6 +2,8 @@
 # Tester script for assignment 1 and assignment 2
 # Author: Siddhant Jajoo
 
+# Clean and build writer application
+
 set -e
 set -u
 
@@ -49,12 +51,27 @@ then
 	fi
 fi
 #echo "Removing the old writer utility and compiling as a native application"
-#make clean
-#make
+echo "Removing old writer utility and compiling as native application"
+if ! make clean 2>&1; then
+    echo "Error: Failed to clean build artifacts" >&2
+    exit 1
+fi
+
+if ! make 2>&1; then
+    echo "Error: Failed to compile writer utility" >&2
+    exit 1
+fi
+
+# Verify build success
+if [ ! -f writer ]; then
+    echo "Error: Failed to build writer utility"
+    exit 1
+fi
 
 for i in $( seq 1 $NUMFILES)
 do
-	./writer.sh "$WRITEDIR/${username}$i.txt" "$WRITESTR"
+    #Replace writer.sh with writer binary app
+    ./writer "$WRITEDIR/${username}$i.txt" "$WRITESTR"
 done
 
 OUTPUTSTRING=$(./finder.sh "$WRITEDIR" "$WRITESTR")
