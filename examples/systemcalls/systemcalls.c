@@ -89,7 +89,7 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
     command[count] = NULL;
     // this line is to avoid a compile warning before your implementation is complete
     command[count] = command[count];
-
+    fflush(stdout);
     pid_t pid = fork();
     if (pid == -1) {
         return false;
